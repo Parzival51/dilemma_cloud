@@ -30,6 +30,9 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     implementation("com.google.firebase:firebase-admin:9.3.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.12.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.3")
+    implementation("com.google.guava:guava:32.1.2-jre")
 }
 
 
@@ -38,9 +41,8 @@ jib {
 
     to {
         image = "gcr.io/gunun-ikilemi/dilemma-backend"
-        tags  = setOf("latest")          // ⬅️  değiştirilmiş satır
-        // örneğin bir versiyon etiketi eklemek istersen:
-        // tags = setOf("latest", "v$version")
+        tags  = setOf("latest")
+
     }
 
     container {

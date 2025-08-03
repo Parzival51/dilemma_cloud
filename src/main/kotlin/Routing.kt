@@ -1,23 +1,19 @@
 package com.example
 
+import com.example.dilemma.routes.adminRoutes
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.cloud.FirestoreClient
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.calllogging.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.slf4j.event.Level
 import java.io.File
+import com.example.dilemma.routes.dilemmaRoutes
 
 fun Application.configureRouting() {
 
-    // ───── Firebase Başlat ─────
     if (FirebaseApp.getApps().isEmpty()) {
         val creds = System.getenv("GOOGLE_APPLICATION_CREDENTIALS")
             ?.let { File(it).inputStream().use(GoogleCredentials::fromStream) }
@@ -37,6 +33,15 @@ fun Application.configureRouting() {
 
 
     routing {
+
+        val repo     = com.example.dilemma.repository.FirestoreDilemmaRepo(db)
+        val service  = com.example.dilemma.service.DilemmaService(repo)
+
+
+        dilemmaRoutes(service)
+        adminRoutes(service)
+
+
         get("/ping") { call.respondText("pong") }
 
         post("/add") {

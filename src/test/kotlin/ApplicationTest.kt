@@ -9,13 +9,12 @@ import kotlin.test.assertEquals
 class ApplicationTest {
 
     @Test
-    fun testRoot() = testApplication {
-        application {
-            module()
-        }
-        client.get("/").apply {
-            assertEquals(HttpStatusCode.OK, status)
-        }
+    fun testPing() = testApplication {
+        application { module() }
+        val res = client.get("/ping")
+        assertEquals(HttpStatusCode.OK, res.status)
+        // İstersen body de doğrula:
+        // assertEquals("pong", res.bodyAsText())
     }
-
 }
+
